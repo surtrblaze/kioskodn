@@ -1,5 +1,5 @@
 import React from 'react';
-import Product from '../interface/Product';
+import { Product } from '../interface/Product';
 
 const ProductTable: React.FC<{ products: Product[], onEdit: (product: Product) => void, onDelete: (product: Product) => void }> = ({ products, onEdit, onDelete }) => {
   return (

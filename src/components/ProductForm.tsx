@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import Product from '../interface/Product';
+import { Product } from '../interface/Product';
 
-const ProductForm: React.FC<{ onSave: (product: Product) => void, onClose: () => void, product?: Product }> = ({ onSave, onClose, product }) => {
+interface Props {
+  onSave: (product: Product) => Promise<void>;
+  onClose: () => void;
+  product?: Product | null;
+}
+
+const ProductForm: React.FC<Props> = ({ onSave, onClose, product }) => {
   const [name, setName] = useState(product?.name || '');
   const [weight, setWeight] = useState(product?.weight || '');
   const [weightType, setWeightType] = useState(product?.weightType || 'kg');
-  const [category, setCategory] = useState(product?.category || 'categoria1');
-  const [price, setPrice] = useState(product?.price || '');
+  const [category, setCategory] = useState(product?.category || 'Alimentos');
+  const [price, setPrice] = useState(product?.price || 0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,7 +22,7 @@ const ProductForm: React.FC<{ onSave: (product: Product) => void, onClose: () =>
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg overflow-y-auto h-5/6 w-2/4">
         <h2 className="text-xl mb-4">{product ? 'Editar Producto' : 'Añadir Producto'}</h2>
         <label className="block mb-2">Nombre</label>
         <input
@@ -43,7 +49,7 @@ const ProductForm: React.FC<{ onSave: (product: Product) => void, onClose: () =>
           required
         >
           <option value="kg">kg</option>
-          <option value="lb">lb</option>
+          <option value="g">g</option>
         </select>
 
         <label className="block mb-2">Categoría</label>
@@ -53,17 +59,15 @@ const ProductForm: React.FC<{ onSave: (product: Product) => void, onClose: () =>
           onChange={(e) => setCategory(e.target.value)}
           required
         >
-          <option value="categoria1">Categoría 1</option>
-          <option value="categoria2">Categoría 2</option>
+          <option value="categoria1">Alimentos</option>
+          <option value="categoria2">Bebidas</option>
         </select>
-        <button type="button" className="text-blue-500 mb-4">Añadir Categoría</button>
-
         <label className="block mb-2">Precio</label>
         <input
           type="number"
           className="border p-2 w-full mb-4"
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => setPrice(parseInt(e.target.value))}
           required
         />
 
